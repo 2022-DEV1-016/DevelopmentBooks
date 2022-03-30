@@ -1,6 +1,7 @@
 package com.digitalstork.devbookskata.service;
 
 import com.digitalstork.devbookskata.dto.DevelopmentBookListDto;
+import com.digitalstork.devbookskata.exception.NoAvailableBooksException;
 import com.digitalstork.devbookskata.mapper.DevelopmentBookDevelopmentBookDtoMapperImpl;
 import com.digitalstork.devbookskata.model.DevelopmentBook;
 import com.digitalstork.devbookskata.repository.DevelopmentBookRepository;
@@ -72,5 +73,19 @@ class DevelopmentBookServiceImplTest {
         assertEquals(developmentBooks.get(3).getTitle(), developmentBookListDtos.get(3).getTitle());
         assertEquals(developmentBooks.get(4).getTitle(), developmentBookListDtos.get(4).getTitle());
 
+    }
+
+    @Test
+    void shouldThrowNoAvailableBooksExceptionWhenNoData() {
+
+        //When
+        Mockito.when(developmentBookRepository.findAll()).thenReturn(new ArrayList<>());
+        Mockito.when(mapper.developmentBooksToDevelopmentBookListDtos(Mockito.anyList())).thenReturn(new ArrayList<>());
+        //Assert
+        NoAvailableBooksException exception = assertThrows(NoAvailableBooksException.class, () -> {
+            developmentBookService.getAllDevelopmentBooks();
+        });
+
+        assertTrue("There is no available books in stock".equals(exception.getMessage()));
     }
 }
