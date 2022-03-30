@@ -51,11 +51,11 @@ class DevelopmentBookServiceImplTest {
         developmentBooks.add(developmentBook5);
 
         List<DevelopmentBookListDto> mappedDtos = new ArrayList<>();
-        mappedDtos.add(new DevelopmentBookListDto("Clean Code", "Robert Martin, 2008"));
-        mappedDtos.add(new DevelopmentBookListDto("The Clean Coder", "Robert Martin, 2011"));
-        mappedDtos.add(new DevelopmentBookListDto("Clean Architecture", "Robert Martin, 2017"));
-        mappedDtos.add(new DevelopmentBookListDto("Test Driven Development by Example", "Kent Beck, 2003"));
-        mappedDtos.add(new DevelopmentBookListDto("Working Effectively With Legacy Code", "Michael C. Feathers, 2004"));
+        mappedDtos.add(new DevelopmentBookListDto(1L, "Clean Code", "Robert Martin, 2008", 5));
+        mappedDtos.add(new DevelopmentBookListDto(2L, "The Clean Coder", "Robert Martin, 2011", 5));
+        mappedDtos.add(new DevelopmentBookListDto(3L,"Clean Architecture", "Robert Martin, 2017", 5));
+        mappedDtos.add(new DevelopmentBookListDto(4L, "Test Driven Development by Example", "Kent Beck, 2003", 5));
+        mappedDtos.add(new DevelopmentBookListDto(5L, "Working Effectively With Legacy Code", "Michael C. Feathers, 2004", 5));
 
         //when
         Mockito.when(developmentBookRepository.findAll()).thenReturn(developmentBooks);
