@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface DevelopmentBookDevelopmentBookDtoMapper {
 
     @Mapping(target = "reference", expression = "java(new StringBuilder(\"\").append(developmentBook.getAuthor()).append(\", \").append(developmentBook.getEdition()).toString())")
