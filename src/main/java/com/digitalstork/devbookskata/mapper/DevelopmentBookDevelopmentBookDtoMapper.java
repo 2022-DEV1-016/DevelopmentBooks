@@ -5,9 +5,13 @@ import com.digitalstork.devbookskata.model.DevelopmentBook;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper
 public interface DevelopmentBookDevelopmentBookDtoMapper {
 
     @Mapping(target = "reference", expression = "java(new StringBuilder(\"\").append(developmentBook.getAuthor()).append(\", \").append(developmentBook.getEdition()).toString())")
     DevelopmentBookListDto developmentBookToDevelopmentBookListDto(DevelopmentBook developmentBook);
+
+    List<DevelopmentBookListDto> developmentBooksToDevelopmentBookListDtos(List<DevelopmentBook> developmentBooks);
 }

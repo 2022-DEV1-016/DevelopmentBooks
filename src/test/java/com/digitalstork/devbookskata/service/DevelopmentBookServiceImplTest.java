@@ -1,6 +1,7 @@
 package com.digitalstork.devbookskata.service;
 
 import com.digitalstork.devbookskata.dto.DevelopmentBookListDto;
+import com.digitalstork.devbookskata.mapper.DevelopmentBookDevelopmentBookDtoMapperImpl;
 import com.digitalstork.devbookskata.model.DevelopmentBook;
 import com.digitalstork.devbookskata.repository.DevelopmentBookRepository;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +24,9 @@ class DevelopmentBookServiceImplTest {
 
     @Mock
     private DevelopmentBookRepository developmentBookRepository;
+
+    @Mock
+    private DevelopmentBookDevelopmentBookDtoMapperImpl mapper;
 
     @Test
     void shouldReturnTheFiveDevelopmentBooksDtos() {
@@ -46,8 +49,17 @@ class DevelopmentBookServiceImplTest {
         developmentBooks.add(developmentBook4);
         developmentBooks.add(developmentBook5);
 
+        List<DevelopmentBookListDto> mappedDtos = new ArrayList<>();
+        mappedDtos.add(new DevelopmentBookListDto("Clean Code", "Robert Martin, 2008"));
+        mappedDtos.add(new DevelopmentBookListDto("The Clean Coder", "Robert Martin, 2011"));
+        mappedDtos.add(new DevelopmentBookListDto("Clean Architecture", "Robert Martin, 2017"));
+        mappedDtos.add(new DevelopmentBookListDto("Test Driven Development by Example", "Kent Beck, 2003"));
+        mappedDtos.add(new DevelopmentBookListDto("Working Effectively With Legacy Code", "Michael C. Feathers, 2004"));
+
         //when
         Mockito.when(developmentBookRepository.findAll()).thenReturn(developmentBooks);
+        Mockito.when(mapper.developmentBooksToDevelopmentBookListDtos(developmentBooks))
+                .thenReturn(mappedDtos);
 
         List<DevelopmentBookListDto> developmentBookListDtos = developmentBookService.getAllDevelopmentBooks();
 
