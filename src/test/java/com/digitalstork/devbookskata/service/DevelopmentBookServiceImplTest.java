@@ -80,7 +80,7 @@ class DevelopmentBookServiceImplTest {
 
         //When
         Mockito.when(developmentBookRepository.findAll()).thenReturn(new ArrayList<>());
-        Mockito.when(mapper.developmentBooksToDevelopmentBookListDtos(Mockito.anyList())).thenReturn(new ArrayList<>());
+        //Mockito.when(mapper.developmentBooksToDevelopmentBookListDtos(Mockito.anyList())).thenReturn(new ArrayList<>());
         //Assert
         NoAvailableBooksException exception = assertThrows(NoAvailableBooksException.class, () -> {
             developmentBookService.getAllDevelopmentBooks();
