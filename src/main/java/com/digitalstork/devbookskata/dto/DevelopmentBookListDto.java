@@ -15,4 +15,10 @@ public class DevelopmentBookListDto {
     private String title;
     private String reference;
     private Integer nbAvailableCopies;
+
+    @Override
+    public boolean equals(Object obj) {
+        DevelopmentBookListDto bookDto = (DevelopmentBookListDto) obj;
+        return this.getId() == bookDto.getId();
+    }
 }

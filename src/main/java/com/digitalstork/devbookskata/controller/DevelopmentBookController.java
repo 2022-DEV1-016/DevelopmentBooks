@@ -17,6 +17,6 @@ public class DevelopmentBookController {
 
     @GetMapping("/getAll")
     ResponseEntity<GetAllBooksResponse> getDevelopmentBooks() {
-        return null;
+        return ResponseEntity.ok(new GetAllBooksResponse(developmentBookService.getAllDevelopmentBooks()));
     }
 }
