@@ -14,9 +14,11 @@ class DevelopmentBookDevelopmentBookDtoMapperTest {
     void shouldMapDevelopmentBookToDevelopmentBookListDto() {
         //given
         DevelopmentBook developmentBook = new DevelopmentBook();
+        developmentBook.setId(1L);
         developmentBook.setTitle("Clean Code");
         developmentBook.setAuthor("Robert Martin");
         developmentBook.setEdition(2008);
+        developmentBook.setNbAvailableCopies(5);
 
         //when
         DevelopmentBookListDto developmentBookListDto =
@@ -24,11 +26,12 @@ class DevelopmentBookDevelopmentBookDtoMapperTest {
 
         //Assert
         assertNotNull(developmentBookListDto);
+        assertEquals(developmentBook.getId(), developmentBookListDto.getId());
         assertEquals(developmentBook.getTitle(), developmentBookListDto.getTitle());
+        assertEquals(developmentBook.getNbAvailableCopies(), developmentBookListDto.getNbAvailableCopies());
         String expectedReference = new StringBuilder("").append(developmentBook.getAuthor())
                                                         .append(", ")
                                                         .append(developmentBook.getEdition()).toString();
-
         assertEquals(expectedReference, developmentBookListDto.getReference());
     }
 

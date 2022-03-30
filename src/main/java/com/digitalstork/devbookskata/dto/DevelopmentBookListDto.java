@@ -11,6 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DevelopmentBookListDto {
 
+    private Long id;
     private String title;
     private String reference;
+    private Integer nbAvailableCopies;
 }
