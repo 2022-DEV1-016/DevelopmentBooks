@@ -24,7 +24,12 @@ public class BookUtils {
             } else {
                 Integer totalPrice = 0;
                 for (Set<Long> set : bookPacks) {
-                    totalPrice += calculatePriceWithDiscount(set.size());
+                    if (set.size() == 1) {
+                        totalPrice += singleBookPrice;
+                    }
+                    else {
+                        totalPrice += calculatePriceWithDiscount(set.size());
+                    }
                 }
                 return totalPrice;
             }
