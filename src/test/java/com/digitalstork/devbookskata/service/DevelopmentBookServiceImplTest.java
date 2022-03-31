@@ -14,7 +14,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -111,5 +113,25 @@ class DevelopmentBookServiceImplTest {
         //Assert
         assertNotNull(resultPrice);
         assertEquals(expectedPrice, resultPrice);
+    }
+
+    @Test
+    void shouldThrowNoAvailableBooksExceptionWhenNoQuantityInStock() {
+
+        //Given
+        DevelopmentBook book =
+                new DevelopmentBook(1L, "Clean Code", "Robert Martin", 2008, 0);
+        DevelopmentBookPurchaseDto purchaseDto = new DevelopmentBookPurchaseDto(1L, 2);
+        List<DevelopmentBookPurchaseDto> purchaseDtos = new ArrayList<>(Arrays.asList(purchaseDto));
+
+        //When
+        Mockito.when(developmentBookRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(book));
+
+        //Assert
+        NoAvailableBooksException exception = assertThrows(NoAvailableBooksException.class, () -> {
+            developmentBookService.purchaseBooks(purchaseDtos);
+        });
+
+        assertTrue("Book with Id {1} is out of stock".equals(exception.getMessage()));
     }
 }
