@@ -1,6 +1,7 @@
 package com.digitalstork.devbookskata.service;
 
 import com.digitalstork.devbookskata.dto.DevelopmentBookListDto;
+import com.digitalstork.devbookskata.dto.DevelopmentBookPurchaseDto;
 import com.digitalstork.devbookskata.exception.NoAvailableBooksException;
 import com.digitalstork.devbookskata.mapper.DevelopmentBookDevelopmentBookDtoMapper;
 import com.digitalstork.devbookskata.model.DevelopmentBook;
@@ -25,5 +26,10 @@ public class DevelopmentBookServiceImpl implements DevelopmentBookService {
             throw new NoAvailableBooksException();
         }
         return mapper.developmentBooksToDevelopmentBookListDtos(developmentBooks);
+    }
+
+    @Override
+    public Integer purchaseBooks(List<DevelopmentBookPurchaseDto> purchaseDtos) {
+        return null;
     }
 }

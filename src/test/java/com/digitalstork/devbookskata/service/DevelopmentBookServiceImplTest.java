@@ -1,6 +1,7 @@
 package com.digitalstork.devbookskata.service;
 
 import com.digitalstork.devbookskata.dto.DevelopmentBookListDto;
+import com.digitalstork.devbookskata.dto.DevelopmentBookPurchaseDto;
 import com.digitalstork.devbookskata.exception.NoAvailableBooksException;
 import com.digitalstork.devbookskata.mapper.DevelopmentBookDevelopmentBookDtoMapperImpl;
 import com.digitalstork.devbookskata.model.DevelopmentBook;
@@ -19,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class DevelopmentBookServiceImplTest {
+
+    private final Integer singleBookPrice = 50;
 
     @InjectMocks
     private DevelopmentBookServiceImpl developmentBookService;
@@ -87,5 +90,26 @@ class DevelopmentBookServiceImplTest {
         });
 
         assertTrue("There is no available books in stock".equals(exception.getMessage()));
+    }
+
+    @Test
+    void shouldPurchaseThreeBooks_withTwoCopiesEach_successfully(){
+        //Given
+        DevelopmentBookPurchaseDto purchaseDto1 = new DevelopmentBookPurchaseDto(1L, 2);
+        DevelopmentBookPurchaseDto purchaseDto2 = new DevelopmentBookPurchaseDto(2L, 2);
+        DevelopmentBookPurchaseDto purchaseDto3 = new DevelopmentBookPurchaseDto(3L, 2);
+        List<DevelopmentBookPurchaseDto> purchaseDtos = new ArrayList<>();
+        purchaseDtos.add(purchaseDto1);
+        purchaseDtos.add(purchaseDto2);
+        purchaseDtos.add(purchaseDto3);
+
+        Integer expectedPrice = (3 * singleBookPrice - 3 * singleBookPrice * 10 / 100 ) * 2;
+
+        //When
+        Integer resultPrice = developmentBookService.purchaseBooks(purchaseDtos);
+
+        //Assert
+        assertNotNull(resultPrice);
+        assertEquals(expectedPrice, resultPrice);
     }
 }
