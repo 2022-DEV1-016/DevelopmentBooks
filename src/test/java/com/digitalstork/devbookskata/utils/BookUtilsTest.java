@@ -28,4 +28,19 @@ class BookUtilsTest {
         assertNotNull(resultPrice);
         assertEquals(singleBookPrice, resultPrice);
     }
+
+    @Test
+    void shouldApply10PercentDiscount_toThreeBooksPackAndReturnPrice() {
+        //Given
+        //a pack contains list of different book Ids
+        Set<Long> threeBooksPack = new HashSet<Long>(Arrays.asList(1L, 2L, 3L));
+        Integer expectedPrice = 3 * singleBookPrice -  3 * singleBookPrice * 10 / 100;
+
+        //When
+        Integer resultPrice = BookUtils.calculatePrice(Arrays.asList(threeBooksPack));
+
+        //Assert
+        assertNotNull(resultPrice);
+        assertEquals(expectedPrice, resultPrice);
+    }
 }
