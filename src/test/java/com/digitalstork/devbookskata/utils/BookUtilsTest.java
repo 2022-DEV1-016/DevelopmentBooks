@@ -67,4 +67,25 @@ class BookUtilsTest {
         assertNotNull(resultPrice);
         assertEquals(expectedPrice, resultPrice);
     }
+
+    @Test
+    void shouldApply10PercentDiscount_andAddOnebookPrice() {
+        //Given
+        Set<Long> singleBook = new HashSet<Long>(Collections.singleton(1L));
+        Set<Long> threeBooksPack = new HashSet<Long>(Arrays.asList(1L, 2L, 3L));
+
+        List<Set<Long>> packList = new ArrayList<>();
+        packList.add(singleBook);
+        packList.add(threeBooksPack);
+
+        Integer expectedPrice = singleBookPrice
+                + 3 * singleBookPrice -  3 * singleBookPrice * 10 / 100;
+
+        //When
+        Integer resultPrice = BookUtils.calculatePrice(packList);
+
+        //Assert
+        assertNotNull(resultPrice);
+        assertEquals(expectedPrice, resultPrice);
+    }
 }
