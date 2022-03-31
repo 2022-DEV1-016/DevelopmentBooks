@@ -6,10 +6,12 @@ import com.digitalstork.devbookskata.exception.NoAvailableBooksException;
 import com.digitalstork.devbookskata.mapper.DevelopmentBookDevelopmentBookDtoMapper;
 import com.digitalstork.devbookskata.model.DevelopmentBook;
 import com.digitalstork.devbookskata.repository.DevelopmentBookRepository;
+import com.digitalstork.devbookskata.utils.BookUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +32,24 @@ public class DevelopmentBookServiceImpl implements DevelopmentBookService {
 
     @Override
     public Integer purchaseBooks(List<DevelopmentBookPurchaseDto> purchaseDtos) {
-        return null;
+
+        // A pack is a set of books Ids
+        Set<Long> pack;
+        List<Set<Long>> packlist = new ArrayList<>();
+
+        List<Integer> quantities = purchaseDtos.stream().map(bookBuy -> bookBuy.getQuantity()).collect(Collectors.toList());
+        int maxPacks = Collections.max(quantities);
+
+        for (int i=0; i<maxPacks; i++) {
+            pack = new HashSet<>();
+            for (int j = 0; j < purchaseDtos.size(); j++) {
+                if (purchaseDtos.get(j).getQuantity()>0) {
+                    pack.add(purchaseDtos.get(j).getBookId());
+                    purchaseDtos.get(j).setQuantity(purchaseDtos.get(j).getQuantity() - 1);
+                }
+            }
+            packlist.add(pack);
+        }
+        return BookUtils.calculatePrice(packlist);
     }
 }
