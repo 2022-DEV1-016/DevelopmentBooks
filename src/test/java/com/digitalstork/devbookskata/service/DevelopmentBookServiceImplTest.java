@@ -3,6 +3,7 @@ package com.digitalstork.devbookskata.service;
 import com.digitalstork.devbookskata.dto.DevelopmentBookListDto;
 import com.digitalstork.devbookskata.dto.DevelopmentBookPurchaseDto;
 import com.digitalstork.devbookskata.exception.BookNotFoundException;
+import com.digitalstork.devbookskata.exception.InvalidBookQuantity;
 import com.digitalstork.devbookskata.exception.NoAvailableBooksException;
 import com.digitalstork.devbookskata.mapper.DevelopmentBookDevelopmentBookDtoMapperImpl;
 import com.digitalstork.devbookskata.model.DevelopmentBook;
@@ -184,5 +185,18 @@ class DevelopmentBookServiceImplTest {
             developmentBookService.updateBookQuantity(invalidBookId, 3);
         });
         assertTrue("Book with Id {7} does not exist".equals(exception.getMessage()));
+    }
+
+    @Test
+    void shouldThrowInvalidBookQuantityExceptionWhenQuantityIsNegative() {
+        //Given
+        DevelopmentBook book =
+                new DevelopmentBook(1L, "Clean Code", "Robert Martin", 2008, 5);
+        Integer invalidQuantity = -2;
+        //Assert
+        InvalidBookQuantity exception = assertThrows(InvalidBookQuantity.class, () -> {
+            developmentBookService.updateBookQuantity(book.getId(), invalidQuantity);
+        });
+        assertTrue("Invalid quantity parameter : {-2}".equals(exception.getMessage()));
     }
 }
