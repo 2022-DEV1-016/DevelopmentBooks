@@ -3,6 +3,7 @@ package com.digitalstork.devbookskata.service;
 import com.digitalstork.devbookskata.dto.DevelopmentBookListDto;
 import com.digitalstork.devbookskata.dto.DevelopmentBookPurchaseDto;
 import com.digitalstork.devbookskata.exception.BookNotFoundException;
+import com.digitalstork.devbookskata.exception.InvalidBookQuantityException;
 import com.digitalstork.devbookskata.exception.NoAvailableBooksException;
 import com.digitalstork.devbookskata.mapper.DevelopmentBookDevelopmentBookDtoMapper;
 import com.digitalstork.devbookskata.model.DevelopmentBook;
@@ -34,6 +35,9 @@ public class DevelopmentBookServiceImpl implements DevelopmentBookService {
 
     @Override
     public DevelopmentBook updateBookQuantity(Long id, Integer newQuantity) {
+        if (newQuantity <0) throw new InvalidBookQuantityException(
+                String.format("Invalid quantity parameter : {%d}", newQuantity)
+        );
         DevelopmentBook book = developmentBookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(String.format("Book with Id {%d} does not exist", id)));
         book.setNbAvailableCopies(newQuantity);
