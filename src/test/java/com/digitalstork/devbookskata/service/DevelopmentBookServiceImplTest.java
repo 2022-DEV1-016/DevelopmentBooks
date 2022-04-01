@@ -157,21 +157,21 @@ class DevelopmentBookServiceImplTest {
     @Test
     void shouldUpdateBookQuantityInDB() {
         //Given
-        Integer newQuantity = 2;
+        Integer soldQuantity = 2;
         DevelopmentBook book =
                 new DevelopmentBook(1L, "Clean Code", "Robert Martin", 2008, 5);
         DevelopmentBook updatedBook =
-                new DevelopmentBook(1L, "Clean Code", "Robert Martin", 2008, 2);
+                new DevelopmentBook(1L, "Clean Code", "Robert Martin", 2008, 3);
 
         //When
         Mockito.when(developmentBookRepository.findById(Mockito.any())).thenReturn(Optional.of(book));
         Mockito.when(developmentBookRepository.save(Mockito.any())).thenReturn(updatedBook);
-        DevelopmentBook result = developmentBookService.updateBookQuantity(book.getId(), newQuantity);
+        DevelopmentBook result = developmentBookService.updateBookQuantity(book.getId(), soldQuantity);
 
         //Then
         assertNotNull(result);
         assertEquals(updatedBook.getId(), result.getId());
-        assertEquals(newQuantity, result.getNbAvailableCopies());
+        assertEquals(updatedBook.getNbAvailableCopies(), result.getNbAvailableCopies());
 
     }
 
