@@ -159,15 +159,18 @@ class DevelopmentBookServiceImplTest {
         Integer newQuantity = 2;
         DevelopmentBook book =
                 new DevelopmentBook(1L, "Clean Code", "Robert Martin", 2008, 5);
+        DevelopmentBook updatedBook =
+                new DevelopmentBook(1L, "Clean Code", "Robert Martin", 2008, 2);
 
         //When
         Mockito.when(developmentBookRepository.findById(Mockito.any())).thenReturn(Optional.of(book));
-        DevelopmentBook updatedBook = developmentBookService.updateBookQuantity(book.getId(), newQuantity);
+        Mockito.when(developmentBookRepository.save(Mockito.any())).thenReturn(updatedBook);
+        DevelopmentBook result = developmentBookService.updateBookQuantity(book.getId(), newQuantity);
 
         //Then
-        assertNotNull(updatedBook);
-        assertEquals(book.getId(), updatedBook.getId());
-        assertEquals(newQuantity, updatedBook.getNbAvailableCopies());
+        assertNotNull(result);
+        assertEquals(updatedBook.getId(), result.getId());
+        assertEquals(newQuantity, result.getNbAvailableCopies());
 
     }
 }
