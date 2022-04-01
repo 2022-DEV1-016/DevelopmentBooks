@@ -166,4 +166,29 @@ class DevelopmentBookControllerTest {
         assertEquals("Invalid quantity parameter : {-2}", response.getBody().getErrorMsg());
 
     }
+
+    @Test
+    void shouldHandleInternalServerError(){
+        //Given
+        String apiUrl = "http://localhost:" + port +"/api/books/purchase";
+        DevelopmentBookPurchaseDto purchaseDto = new DevelopmentBookPurchaseDto(1L, null);
+        List<DevelopmentBookPurchaseDto> purchaseDtos = new ArrayList<>(Arrays.asList(purchaseDto));
+
+        //When
+        Mockito.when(developmentBookService.purchaseBooks(Mockito.any())).thenThrow(
+                new NullPointerException("")
+        );
+
+        ResponseEntity<ErrorResponse> response =
+                restTemplate.postForEntity(apiUrl, purchaseDtos,ErrorResponse.class);
+
+        //Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getBody().getStatus());
+        assertTrue(response.getBody().getErrorCode().isEmpty());
+        assertTrue(response.getBody().getErrorMsg().isEmpty());
+
+    }
 }
