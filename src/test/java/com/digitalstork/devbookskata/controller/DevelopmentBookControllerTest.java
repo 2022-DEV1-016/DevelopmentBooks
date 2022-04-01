@@ -2,7 +2,9 @@ package com.digitalstork.devbookskata.controller;
 
 import com.digitalstork.devbookskata.DevbookskataApplication;
 import com.digitalstork.devbookskata.dto.DevelopmentBookListDto;
+import com.digitalstork.devbookskata.dto.DevelopmentBookPurchaseDto;
 import com.digitalstork.devbookskata.dto.GetAllBooksResponse;
+import com.digitalstork.devbookskata.dto.PurchaseBooksResponse;
 import com.digitalstork.devbookskata.service.DevelopmentBookService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = DevbookskataApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class DevelopmentBookControllerTest {
+
+    private final Integer singleBookPrice = 50;
 
     @MockBean
     DevelopmentBookService developmentBookService;
@@ -59,5 +63,31 @@ class DevelopmentBookControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertTrue(bookDtos.equals(response.getBody().getDevelopmentBookListDtos()));
+    }
+
+    @Test
+    void shouldPurchaseTwoBooksWithSuccess(){
+
+        //Given
+        String apiUrl = "http://localhost:" + port +"/api/books/purchase";
+        DevelopmentBookPurchaseDto purchaseDto1 = new DevelopmentBookPurchaseDto(1L, 1);
+        DevelopmentBookPurchaseDto purchaseDto2 = new DevelopmentBookPurchaseDto(2L, 1);
+        List<DevelopmentBookPurchaseDto> purchaseDtos = new ArrayList<>();
+        purchaseDtos.add(purchaseDto1);
+        purchaseDtos.add(purchaseDto2);
+        Integer expectedPrice = 2 * singleBookPrice - 2 * singleBookPrice * 5 / 100;
+
+        //When
+        Mockito.when(developmentBookService.purchaseBooks(Mockito.any())).thenReturn(expectedPrice);
+
+        ResponseEntity<PurchaseBooksResponse> response =
+                restTemplate.postForEntity(apiUrl, purchaseDtos,PurchaseBooksResponse.class);
+
+        //Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(expectedPrice, response.getBody().getTotalPrice());
+
     }
 }
