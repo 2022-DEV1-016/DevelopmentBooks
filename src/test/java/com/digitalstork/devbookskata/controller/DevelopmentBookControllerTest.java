@@ -5,6 +5,9 @@ import com.digitalstork.devbookskata.dto.DevelopmentBookListDto;
 import com.digitalstork.devbookskata.dto.DevelopmentBookPurchaseDto;
 import com.digitalstork.devbookskata.dto.GetAllBooksResponse;
 import com.digitalstork.devbookskata.dto.PurchaseBooksResponse;
+import com.digitalstork.devbookskata.exception.BookNotFoundException;
+import com.digitalstork.devbookskata.exception.ErrorCodeE;
+import com.digitalstork.devbookskata.exception.ErrorResponse;
 import com.digitalstork.devbookskata.service.DevelopmentBookService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -18,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,9 +37,6 @@ class DevelopmentBookControllerTest {
 
     @Autowired
     TestRestTemplate restTemplate;
-
-    @Autowired
-    private ServerProperties serverProperties;
 
     @LocalServerPort
     int port;
@@ -88,6 +89,30 @@ class DevelopmentBookControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(expectedPrice, response.getBody().getTotalPrice());
+
+    }
+
+    @Test
+    void shouldHandleBookNotFoundException() {
+
+        //Given
+        String apiUrl = "http://localhost:" + port +"/api/books/purchase";
+        DevelopmentBookPurchaseDto purchaseDto = new DevelopmentBookPurchaseDto(1L, 1);
+        List<DevelopmentBookPurchaseDto> purchaseDtos = new ArrayList<>(Arrays.asList(purchaseDto));
+
+        //When
+        Mockito.when(developmentBookService.purchaseBooks(Mockito.any())).thenThrow(BookNotFoundException.class);
+
+        ResponseEntity<ErrorResponse> response =
+                restTemplate.postForEntity(apiUrl, purchaseDtos,ErrorResponse.class);
+
+        //Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getBody().getStatus());
+        assertEquals(ErrorCodeE.BOOK_NOT_FOUND.name(), response.getBody().getErrorCode());
+        assertEquals(ErrorCodeE.BOOK_NOT_FOUND.getErrorMsg(), response.getBody().getErrorMsg());
 
     }
 }
