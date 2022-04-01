@@ -34,13 +34,13 @@ public class DevelopmentBookServiceImpl implements DevelopmentBookService {
     }
 
     @Override
-    public DevelopmentBook updateBookQuantity(Long id, Integer newQuantity) {
-        if (newQuantity <0) throw new InvalidBookQuantityException(
-                String.format("Invalid quantity parameter : {%d}", newQuantity)
+    public DevelopmentBook updateBookQuantity(Long id, Integer soldQuantity) {
+        if (soldQuantity <0) throw new InvalidBookQuantityException(
+                String.format("Invalid quantity parameter : {%d}", soldQuantity)
         );
         DevelopmentBook book = developmentBookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(String.format("Book with Id {%d} does not exist", id)));
-        book.setNbAvailableCopies(newQuantity);
+        book.setNbAvailableCopies(book.getNbAvailableCopies() - soldQuantity);
         return developmentBookRepository.save(book);
     }
 

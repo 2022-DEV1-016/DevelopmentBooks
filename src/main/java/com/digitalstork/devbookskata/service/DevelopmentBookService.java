@@ -12,6 +12,6 @@ public interface DevelopmentBookService {
 
     Double purchaseBooks(List<DevelopmentBookPurchaseDto> purchaseDtos);
 
-    DevelopmentBook updateBookQuantity(Long id, Integer newQuantity);
+    DevelopmentBook updateBookQuantity(Long id, Integer soldQuantity);
 
 }
