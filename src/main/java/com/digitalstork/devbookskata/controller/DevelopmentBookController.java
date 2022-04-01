@@ -24,6 +24,6 @@ public class DevelopmentBookController {
 
     @PostMapping("/purchase")
     ResponseEntity<PurchaseBooksResponse> purchaseBooks(@RequestBody List<DevelopmentBookPurchaseDto> bookDtos) {
-        return null;
+        return ResponseEntity.ok(new PurchaseBooksResponse(developmentBookService.purchaseBooks(bookDtos)));
     }
 }
