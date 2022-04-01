@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +33,14 @@ public class DevelopmentBookServiceImpl implements DevelopmentBookService {
 
     @Override
     public Integer purchaseBooks(List<DevelopmentBookPurchaseDto> purchaseDtos) {
+
+        AtomicReference<DevelopmentBook> book = new AtomicReference<>();
+        purchaseDtos.stream().forEach( bookdto -> {
+            book.set(developmentBookRepository.findById(bookdto.getBookId()).get());
+            if (book.get().getNbAvailableCopies() < bookdto.getQuantity()) {
+                throw new NoAvailableBooksException(String.format("Book with Id {%d} is out of stock", bookdto.getBookId()));
+            }
+        });
 
         // A pack is a set of books Ids
         Set<Long> pack;
