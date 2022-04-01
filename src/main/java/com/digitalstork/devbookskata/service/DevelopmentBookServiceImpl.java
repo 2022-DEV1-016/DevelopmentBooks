@@ -34,7 +34,8 @@ public class DevelopmentBookServiceImpl implements DevelopmentBookService {
 
     @Override
     public DevelopmentBook updateBookQuantity(Long id, Integer newQuantity) {
-        DevelopmentBook book = developmentBookRepository.findById(id).get();
+        DevelopmentBook book = developmentBookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(String.format("Book with Id {%d} does not exist", id)));
         book.setNbAvailableCopies(newQuantity);
         return developmentBookRepository.save(book);
     }
