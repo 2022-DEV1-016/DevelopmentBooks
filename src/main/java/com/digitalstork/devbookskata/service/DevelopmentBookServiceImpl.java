@@ -59,6 +59,11 @@ public class DevelopmentBookServiceImpl implements DevelopmentBookService {
             }
         });
 
+        // update Quantity of books in DB
+        for (DevelopmentBookPurchaseDto dto: purchaseDtos) {
+            this.updateBookQuantity(dto.getBookId(), dto.getQuantity());
+        }
+        // Build packs and calculate price
         // A pack is a set of books Ids
         Set<Long> pack;
         List<Set<Long>> packlist = new ArrayList<>();
