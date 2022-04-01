@@ -97,6 +97,8 @@ class DevelopmentBookServiceImplTest {
     @Test
     void shouldPurchaseThreeBooks_withTwoCopiesEach_successfully(){
         //Given
+        DevelopmentBook book =
+                new DevelopmentBook(1L, "Clean Code", "Robert Martin", 2008, 5);
         DevelopmentBookPurchaseDto purchaseDto1 = new DevelopmentBookPurchaseDto(1L, 2);
         DevelopmentBookPurchaseDto purchaseDto2 = new DevelopmentBookPurchaseDto(2L, 2);
         DevelopmentBookPurchaseDto purchaseDto3 = new DevelopmentBookPurchaseDto(3L, 2);
@@ -108,6 +110,7 @@ class DevelopmentBookServiceImplTest {
         Integer expectedPrice = (3 * singleBookPrice - 3 * singleBookPrice * 10 / 100 ) * 2;
 
         //When
+        Mockito.when(developmentBookRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(book));
         Integer resultPrice = developmentBookService.purchaseBooks(purchaseDtos);
 
         //Assert
