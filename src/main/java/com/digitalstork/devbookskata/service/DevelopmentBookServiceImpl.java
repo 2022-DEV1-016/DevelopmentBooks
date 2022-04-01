@@ -34,7 +34,9 @@ public class DevelopmentBookServiceImpl implements DevelopmentBookService {
 
     @Override
     public DevelopmentBook updateBookQuantity(Long id, Integer newQuantity) {
-        return null;
+        DevelopmentBook book = developmentBookRepository.findById(id).get();
+        book.setNbAvailableCopies(newQuantity);
+        return developmentBookRepository.save(book);
     }
 
     @Override
