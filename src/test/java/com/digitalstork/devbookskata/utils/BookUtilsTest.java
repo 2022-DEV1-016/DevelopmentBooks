@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BookUtilsTest {
 
-    private final Integer singleBookPrice = 50;
+    private final Double singleBookPrice = 50d;
 
     @Test
     void shouldReturn50EurosForOneBook() {
@@ -19,7 +19,7 @@ class BookUtilsTest {
         Set<Long> singleBookPack = new HashSet<Long>(Collections.singleton(developmentBook.getId()));
 
         //When
-        Integer resultPrice = BookUtils.calculatePrice(Arrays.asList(singleBookPack));
+        Double resultPrice = BookUtils.calculatePrice(Arrays.asList(singleBookPack));
 
         //Assert
         assertNotNull(resultPrice);
@@ -31,10 +31,10 @@ class BookUtilsTest {
         //Given
         //a pack contains list of different book Ids
         Set<Long> threeBooksPack = new HashSet<Long>(Arrays.asList(1L, 2L, 3L));
-        Integer expectedPrice = 3 * singleBookPrice -  3 * singleBookPrice * 10 / 100;
+        Double expectedPrice = 3 * singleBookPrice -  3 * singleBookPrice * 10 / 100;
 
         //When
-        Integer resultPrice = BookUtils.calculatePrice(Arrays.asList(threeBooksPack));
+        Double resultPrice = BookUtils.calculatePrice(Arrays.asList(threeBooksPack));
 
         //Assert
         assertNotNull(resultPrice);
@@ -55,13 +55,13 @@ class BookUtilsTest {
         packList.add(fourBooksPack);
         packList.add(fiveBooksPack);
 
-        Integer expectedPrice = 2 * singleBookPrice -  2 * singleBookPrice * 5 / 100
+        Double expectedPrice = 2 * singleBookPrice -  2 * singleBookPrice * 5 / 100
                               + 3 * singleBookPrice -  3 * singleBookPrice * 10 / 100
                               + 4 * singleBookPrice -  4 * singleBookPrice * 20 / 100
                               + 5 * singleBookPrice -  5 * singleBookPrice * 25 / 100;
 
         //When
-        Integer resultPrice = BookUtils.calculatePrice(packList);
+        Double resultPrice = BookUtils.calculatePrice(packList);
 
         //Assert
         assertNotNull(resultPrice);
@@ -78,11 +78,11 @@ class BookUtilsTest {
         packList.add(singleBook);
         packList.add(threeBooksPack);
 
-        Integer expectedPrice = singleBookPrice
+        Double expectedPrice = singleBookPrice
                 + 3 * singleBookPrice -  3 * singleBookPrice * 10 / 100;
 
         //When
-        Integer resultPrice = BookUtils.calculatePrice(packList);
+        Double resultPrice = BookUtils.calculatePrice(packList);
 
         //Assert
         assertNotNull(resultPrice);

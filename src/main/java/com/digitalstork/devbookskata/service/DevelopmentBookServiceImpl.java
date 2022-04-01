@@ -33,7 +33,7 @@ public class DevelopmentBookServiceImpl implements DevelopmentBookService {
     }
 
     @Override
-    public Integer purchaseBooks(List<DevelopmentBookPurchaseDto> purchaseDtos) {
+    public Double purchaseBooks(List<DevelopmentBookPurchaseDto> purchaseDtos) {
 
         AtomicReference<DevelopmentBook> book = new AtomicReference<>();
         purchaseDtos.stream().forEach( bookdto -> {

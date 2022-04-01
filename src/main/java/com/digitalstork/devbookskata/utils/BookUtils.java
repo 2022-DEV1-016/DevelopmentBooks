@@ -6,14 +6,14 @@ import java.util.Set;
 
 public class BookUtils {
 
-    public static final Integer singleBookPrice = 50;
+    public static final Double singleBookPrice = 50d;
 
     public static final Integer twoBooksDiscount = 5;
     public static final Integer threeBooksDiscount = 10;
     public static final Integer fourBooksDiscount = 20;
     public static final Integer fiveBooksDiscount = 25;
 
-    public static Integer calculatePrice(List<Set<Long>> bookPacks) {
+    public static Double calculatePrice(List<Set<Long>> bookPacks) {
         if (Objects.nonNull(bookPacks)) {
             if (bookPacks.size() == 1) {
                 if (bookPacks.get(0).size() == 1) {
@@ -22,7 +22,7 @@ public class BookUtils {
                     return calculatePriceWithDiscount(bookPacks.get(0).size());
                 }
             } else {
-                Integer totalPrice = 0;
+                Double totalPrice = 0d;
                 for (Set<Long> set : bookPacks) {
                     if (set.size() == 1) {
                         totalPrice += singleBookPrice;
@@ -38,7 +38,7 @@ public class BookUtils {
         }
     }
 
-    private static Integer calculatePriceWithDiscount(Integer numberOfBooks) {
+    private static Double calculatePriceWithDiscount(Integer numberOfBooks) {
         switch (numberOfBooks) {
             case 2:
                 return singleBookPrice * 2 - singleBookPrice * 2 * twoBooksDiscount / 100;

@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(classes = DevbookskataApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class DevelopmentBookControllerTest {
 
-    private final Integer singleBookPrice = 50;
+    private final Double singleBookPrice = 50d;
 
     @MockBean
     DevelopmentBookService developmentBookService;
@@ -75,7 +75,7 @@ class DevelopmentBookControllerTest {
         List<DevelopmentBookPurchaseDto> purchaseDtos = new ArrayList<>();
         purchaseDtos.add(purchaseDto1);
         purchaseDtos.add(purchaseDto2);
-        Integer expectedPrice = 2 * singleBookPrice - 2 * singleBookPrice * 5 / 100;
+        Double expectedPrice = 2 * singleBookPrice - 2 * singleBookPrice * 5 / 100;
 
         //When
         Mockito.when(developmentBookService.purchaseBooks(Mockito.any())).thenReturn(expectedPrice);

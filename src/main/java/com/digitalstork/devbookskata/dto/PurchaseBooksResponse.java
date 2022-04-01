@@ -11,5 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PurchaseBooksResponse {
 
-    private Integer totalPrice;
+    private Double totalPrice;
 }

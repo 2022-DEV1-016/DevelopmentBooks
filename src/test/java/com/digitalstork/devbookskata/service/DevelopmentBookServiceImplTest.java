@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class DevelopmentBookServiceImplTest {
 
-    private final Integer singleBookPrice = 50;
+    private final Double singleBookPrice = 50d;
 
     @InjectMocks
     private DevelopmentBookServiceImpl developmentBookService;
@@ -108,11 +108,11 @@ class DevelopmentBookServiceImplTest {
         purchaseDtos.add(purchaseDto2);
         purchaseDtos.add(purchaseDto3);
 
-        Integer expectedPrice = (3 * singleBookPrice - 3 * singleBookPrice * 10 / 100 ) * 2;
+        Double expectedPrice = (3 * singleBookPrice - 3 * singleBookPrice * 10 / 100 ) * 2;
 
         //When
         Mockito.when(developmentBookRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(book));
-        Integer resultPrice = developmentBookService.purchaseBooks(purchaseDtos);
+        Double resultPrice = developmentBookService.purchaseBooks(purchaseDtos);
 
         //Assert
         assertNotNull(resultPrice);

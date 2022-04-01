@@ -9,5 +9,5 @@ public interface DevelopmentBookService {
 
     List<DevelopmentBookListDto> getAllDevelopmentBooks();
 
-    Integer purchaseBooks(List<DevelopmentBookPurchaseDto> purchaseDtos);
+    Double purchaseBooks(List<DevelopmentBookPurchaseDto> purchaseDtos);
 }
