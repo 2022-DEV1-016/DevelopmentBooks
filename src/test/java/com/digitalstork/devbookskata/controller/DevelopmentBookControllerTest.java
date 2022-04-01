@@ -101,7 +101,9 @@ class DevelopmentBookControllerTest {
         List<DevelopmentBookPurchaseDto> purchaseDtos = new ArrayList<>(Arrays.asList(purchaseDto));
 
         //When
-        Mockito.when(developmentBookService.purchaseBooks(Mockito.any())).thenThrow(BookNotFoundException.class);
+        Mockito.when(developmentBookService.purchaseBooks(Mockito.any())).thenThrow(
+                new BookNotFoundException("Book with Id {1} does not exist")
+        );
 
         ResponseEntity<ErrorResponse> response =
                 restTemplate.postForEntity(apiUrl, purchaseDtos,ErrorResponse.class);
@@ -112,7 +114,7 @@ class DevelopmentBookControllerTest {
         assertNotNull(response.getBody());
         assertEquals(HttpStatus.BAD_REQUEST, response.getBody().getStatus());
         assertEquals(ErrorCodeE.BOOK_NOT_FOUND.name(), response.getBody().getErrorCode());
-        assertEquals(ErrorCodeE.BOOK_NOT_FOUND.getErrorMsg(), response.getBody().getErrorMsg());
+        assertEquals("Book with Id {1} does not exist", response.getBody().getErrorMsg());
 
     }
 }
