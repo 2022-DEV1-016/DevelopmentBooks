@@ -2,6 +2,7 @@ package com.digitalstork.devbookskata.service;
 
 import com.digitalstork.devbookskata.dto.DevelopmentBookListDto;
 import com.digitalstork.devbookskata.dto.DevelopmentBookPurchaseDto;
+import com.digitalstork.devbookskata.exception.BookNotFoundException;
 import com.digitalstork.devbookskata.exception.NoAvailableBooksException;
 import com.digitalstork.devbookskata.mapper.DevelopmentBookDevelopmentBookDtoMapper;
 import com.digitalstork.devbookskata.model.DevelopmentBook;
@@ -36,7 +37,8 @@ public class DevelopmentBookServiceImpl implements DevelopmentBookService {
 
         AtomicReference<DevelopmentBook> book = new AtomicReference<>();
         purchaseDtos.stream().forEach( bookdto -> {
-            book.set(developmentBookRepository.findById(bookdto.getBookId()).get());
+            book.set(developmentBookRepository.findById(bookdto.getBookId())
+                    .orElseThrow(() -> new BookNotFoundException(String.format("Book with Id {%d} does not exist", bookdto.getBookId()))));
             if (book.get().getNbAvailableCopies() < bookdto.getQuantity()) {
                 throw new NoAvailableBooksException(String.format("Book with Id {%d} is out of stock", bookdto.getBookId()));
             }
