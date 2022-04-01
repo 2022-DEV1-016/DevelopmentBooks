@@ -173,4 +173,16 @@ class DevelopmentBookServiceImplTest {
         assertEquals(newQuantity, result.getNbAvailableCopies());
 
     }
+
+    @Test
+    void shouldThrowBookNotFoundExceptionWhenBookBookIdNotExists() {
+
+        //Given
+        Long invalidBookId = 7L;
+        //Assert
+        BookNotFoundException exception = assertThrows(BookNotFoundException.class, () -> {
+            developmentBookService.updateBookQuantity(invalidBookId, 3);
+        });
+        assertTrue("Book with Id {7} does not exist".equals(exception.getMessage()));
+    }
 }
