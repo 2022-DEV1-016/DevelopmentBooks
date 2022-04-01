@@ -152,4 +152,22 @@ class DevelopmentBookServiceImplTest {
         });
         assertTrue("Book with Id {7} does not exist".equals(exception.getMessage()));
     }
+
+    @Test
+    void shouldUpdateBookQuantityInDB() {
+        //Given
+        Integer newQuantity = 2;
+        DevelopmentBook book =
+                new DevelopmentBook(1L, "Clean Code", "Robert Martin", 2008, 5);
+
+        //When
+        Mockito.when(developmentBookRepository.findById(Mockito.any())).thenReturn(Optional.of(book));
+        DevelopmentBook updatedBook = developmentBookService.updateBookQuantity(book.getId(), newQuantity);
+
+        //Then
+        assertNotNull(updatedBook);
+        assertEquals(book.getId(), updatedBook.getId());
+        assertEquals(newQuantity, updatedBook.getNbAvailableCopies());
+
+    }
 }

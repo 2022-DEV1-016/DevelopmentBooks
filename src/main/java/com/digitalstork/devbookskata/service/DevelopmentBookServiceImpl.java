@@ -33,6 +33,11 @@ public class DevelopmentBookServiceImpl implements DevelopmentBookService {
     }
 
     @Override
+    public DevelopmentBook updateBookQuantity(Long id, Integer newQuantity) {
+        return null;
+    }
+
+    @Override
     public Double purchaseBooks(List<DevelopmentBookPurchaseDto> purchaseDtos) {
 
         AtomicReference<DevelopmentBook> book = new AtomicReference<>();
