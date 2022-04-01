@@ -50,7 +50,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleTechnicalException(Exception ex) {
-        log.error("Technical Exception : {}", ex);
+        // Recommended to log the trace in a log file
+        //  log.error("Technical Exception : {}", ex);
         ErrorResponse response = ErrorResponse.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .errorCode("")
