@@ -5,14 +5,11 @@ import com.digitalstork.devbookskata.dto.DevelopmentBookListDto;
 import com.digitalstork.devbookskata.dto.DevelopmentBookPurchaseDto;
 import com.digitalstork.devbookskata.dto.GetAllBooksResponse;
 import com.digitalstork.devbookskata.dto.PurchaseBooksResponse;
-import com.digitalstork.devbookskata.exception.BookNotFoundException;
-import com.digitalstork.devbookskata.exception.ErrorCodeE;
-import com.digitalstork.devbookskata.exception.ErrorResponse;
+import com.digitalstork.devbookskata.exception.*;
 import com.digitalstork.devbookskata.service.DevelopmentBookService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -115,6 +112,32 @@ class DevelopmentBookControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, response.getBody().getStatus());
         assertEquals(ErrorCodeE.BOOK_NOT_FOUND.name(), response.getBody().getErrorCode());
         assertEquals("Book with Id {1} does not exist", response.getBody().getErrorMsg());
+
+    }
+
+    @Test
+    void shouldHandleNoAvailableBooksException() {
+
+        //Given
+        String apiUrl = "http://localhost:" + port +"/api/books/purchase";
+        DevelopmentBookPurchaseDto purchaseDto = new DevelopmentBookPurchaseDto(1L, 8);
+        List<DevelopmentBookPurchaseDto> purchaseDtos = new ArrayList<>(Arrays.asList(purchaseDto));
+
+        //When
+        Mockito.when(developmentBookService.purchaseBooks(Mockito.any())).thenThrow(
+                new NoAvailableBooksException("Book with Id {8} is out of stock")
+        );
+
+        ResponseEntity<ErrorResponse> response =
+                restTemplate.postForEntity(apiUrl, purchaseDtos,ErrorResponse.class);
+
+        //Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getBody().getStatus());
+        assertEquals(ErrorCodeE.BOOK_OUT_OF_STOCK.name(), response.getBody().getErrorCode());
+        assertEquals("Book with Id {8} is out of stock", response.getBody().getErrorMsg());
 
     }
 }
