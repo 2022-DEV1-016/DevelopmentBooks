@@ -199,4 +199,21 @@ class DevelopmentBookServiceImplTest {
         });
         assertTrue("Invalid quantity parameter : {-2}".equals(exception.getMessage()));
     }
+
+    @Test
+    void shouldThrowInvalidBookQuantityExceptionWhenRemainingQuantityIsNegative() {
+        //Given
+        DevelopmentBook book =
+                new DevelopmentBook(1L, "Clean Code", "Robert Martin", 2008, 2);
+        Integer invalidQuantity = 4;
+
+        //When
+        Mockito.when(developmentBookRepository.findById(Mockito.any())).thenReturn(Optional.of(book));
+
+        //Assert
+        InvalidBookQuantityException exception = assertThrows(InvalidBookQuantityException.class, () -> {
+            developmentBookService.updateBookQuantity(book.getId(), invalidQuantity);
+        });
+        assertTrue("Available copies must not be negative".equals(exception.getMessage()));
+    }
 }
