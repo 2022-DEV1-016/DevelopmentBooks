@@ -140,4 +140,30 @@ class DevelopmentBookControllerTest {
         assertEquals("Book with Id {8} is out of stock", response.getBody().getErrorMsg());
 
     }
+
+    @Test
+    void shouldHandleInvalidBookQuantityException() {
+
+        //Given
+        String apiUrl = "http://localhost:" + port +"/api/books/purchase";
+        DevelopmentBookPurchaseDto purchaseDto = new DevelopmentBookPurchaseDto(1L, -2);
+        List<DevelopmentBookPurchaseDto> purchaseDtos = new ArrayList<>(Arrays.asList(purchaseDto));
+
+        //When
+        Mockito.when(developmentBookService.purchaseBooks(Mockito.any())).thenThrow(
+                new InvalidBookQuantityException("Invalid quantity parameter : {-2}")
+        );
+
+        ResponseEntity<ErrorResponse> response =
+                restTemplate.postForEntity(apiUrl, purchaseDtos,ErrorResponse.class);
+
+        //Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getBody().getStatus());
+        assertEquals(ErrorCodeE.INVALID_QUANTITY_PARAM.name(), response.getBody().getErrorCode());
+        assertEquals("Invalid quantity parameter : {-2}", response.getBody().getErrorMsg());
+
+    }
 }

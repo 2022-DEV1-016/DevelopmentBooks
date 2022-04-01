@@ -7,7 +7,8 @@ import lombok.Getter;
 @Getter
 public enum ErrorCodeE {
     BOOK_NOT_FOUND("Book Not Found"),
-    BOOK_OUT_OF_STOCK("Book out of stock");
+    BOOK_OUT_OF_STOCK("Book out of stock"),
+    INVALID_QUANTITY_PARAM("Invalid quantity parameter");
 
     private final String errorMsg;
 }
