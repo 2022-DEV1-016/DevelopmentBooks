@@ -41,6 +41,9 @@ public class DevelopmentBookServiceImpl implements DevelopmentBookService {
         DevelopmentBook book = developmentBookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(String.format("Book with Id {%d} does not exist", id)));
         book.setNbAvailableCopies(book.getNbAvailableCopies() - soldQuantity);
+        if (book.getNbAvailableCopies() <0) {
+            throw new InvalidBookQuantityException("Available copies must not be negative");
+        }
         return developmentBookRepository.save(book);
     }
 
