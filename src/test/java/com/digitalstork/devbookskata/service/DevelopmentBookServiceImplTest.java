@@ -2,6 +2,7 @@ package com.digitalstork.devbookskata.service;
 
 import com.digitalstork.devbookskata.dto.DevelopmentBookListDto;
 import com.digitalstork.devbookskata.dto.DevelopmentBookPurchaseDto;
+import com.digitalstork.devbookskata.exception.BookNotFoundException;
 import com.digitalstork.devbookskata.exception.NoAvailableBooksException;
 import com.digitalstork.devbookskata.mapper.DevelopmentBookDevelopmentBookDtoMapperImpl;
 import com.digitalstork.devbookskata.model.DevelopmentBook;
@@ -136,5 +137,19 @@ class DevelopmentBookServiceImplTest {
         });
 
         assertTrue("Book with Id {1} is out of stock".equals(exception.getMessage()));
+    }
+
+    @Test
+    void shouldThrowBookNotFoundExceptionWhenBookBookNotExists() {
+
+        //Given
+        DevelopmentBookPurchaseDto purchaseDto = new DevelopmentBookPurchaseDto(7L, 5);
+        List<DevelopmentBookPurchaseDto> purchaseDtos = new ArrayList<>(Arrays.asList(purchaseDto));
+
+        //Assert
+        BookNotFoundException exception = assertThrows(BookNotFoundException.class, () -> {
+            developmentBookService.purchaseBooks(purchaseDtos);
+        });
+        assertTrue("Book with Id {7} does not exist".equals(exception.getMessage()));
     }
 }
